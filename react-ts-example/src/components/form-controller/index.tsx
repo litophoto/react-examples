@@ -1,6 +1,6 @@
 import { useDefaultForm } from "../../hooks/defaultHooks";
 import InputControl from "./InputControl";
-import SelectControl from "./SelectControl";
+import SelectControl from "./SelectControl2022-10-4";
 type Form = {
   username: string;
   sex: string;
@@ -21,7 +21,11 @@ const Controled = () => {
         <SelectControl
           name="sex"
           control={control}
-          options={[{ value: "female" }, { value: "male" }, { value: "other" }]}
+          options={[
+            { id: 1, title: "Female", value: "female" },
+            { id: 2, title: "Male", value: "male" },
+            { id: 3, title: "Other", value: "other" },
+          ]}
         />
         <input type="submit" />
       </form>
