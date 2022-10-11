@@ -32,6 +32,32 @@ const TodoItem = (props: TodoItemProps) => {
     props.change(props.todo, newTodo);
   };
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [newTitle, setNewTitle] = useState("");
+  useEffect(() => {
+    setNewTitle(props.todo.title);
+  }, []);
+
+  const handleChangeTitle = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setNewTitle(event.target.value);
+  };
+  const handleChangeTodo = () => {};
+  const [typing, setTyping] = useState(false);
+  const handleStartEdit = () => {
+    setIsEditing(true)
+  }
+  const handleDoneEdit = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== "Enter" || typing) return;
+    const newTodo: Todo = {
+      title: newTitle,
+      completed: props.todo.completed,
+    };
+    newTodo && props.change(props.todo, newTodo);
+    setIsEditing(false);
+  };
+
   return (
     <>
       <ListItem
@@ -50,7 +76,25 @@ const TodoItem = (props: TodoItemProps) => {
           checked={props.todo.completed}
           onChange={(e) => handleChange(e)}
         />
-        <Typography>{props.todo.title}</Typography>
+        {isEditing ? (
+          <TextField
+            value={newTitle}
+            onChange={handleChangeTitle}
+            onKeyDown={handleDoneEdit}
+            onCompositionStart={() => setTyping(true)}
+            onCompositionEnd={() => setTyping(false)}
+            size="small"
+            variant="standard"
+            fullWidth
+          />
+        ) : (
+          <Typography
+            sx={{ width: "100%" }}
+            onDoubleClick={handleStartEdit}
+          >
+            {props.todo.title}
+          </Typography>
+        )}
       </ListItem>
     </>
   );
