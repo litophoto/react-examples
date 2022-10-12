@@ -7,7 +7,6 @@ import { Delete } from "@mui/icons-material";
 import { Todo, Visibility } from "../models/todos";
 import todosAPI from "../api/todos";
 
-// const url = "http://127.0.0.1:8000/todos/";
 
 const todosFilter = (todos: Todo[]) => {
   return {
@@ -43,7 +42,7 @@ const TodoItem = (props: TodoItemProps) => {
   ) => {
     setNewTitle(event.target.value);
   };
-  const handleChangeTodo = () => {};
+  
   const [typing, setTyping] = useState(false);
   const handleStartEdit = () => {
     setIsEditing(true)
