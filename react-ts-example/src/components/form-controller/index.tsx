@@ -1,6 +1,6 @@
 import { useDefaultForm } from "../../hooks/defaultHooks";
-import InputControl from "./InputControl";
-import SelectControl from "./SelectControl2022-10-4";
+import MUITextFieldController from "./MUITextFieldController";
+import SelectControl from "./MUISelectController";
 type Form = {
   username: string;
   sex: string;
@@ -17,7 +17,7 @@ const Controled = () => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <InputControl name="username" control={control} />
+        <MUITextFieldController name="username" control={control} />
         <SelectControl
           name="sex"
           control={control}
