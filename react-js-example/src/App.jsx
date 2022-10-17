@@ -1,4 +1,4 @@
-import Index from "./form-controller/InputForm";
+import Index from "./tutorial/Index";
 
 const App = () => {
   return (
