@@ -1,4 +1,4 @@
-const calculateWinner = (squares: []) => {
+const calculateWinner = (squares: (string | null)[]) => {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],

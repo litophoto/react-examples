@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Square from "./Square";
+import { calculateWinner } from "../../helper/index";
 
 type StateType = {
   squares: (string | null)[];
@@ -13,6 +14,9 @@ const Board = () => {
   });
   const handleClick = (i: number) => {
     const newSquares = state.squares.slice();
+    if (calculateWinner(state.squares) || state.squares[i]) {
+      return
+    }
     newSquares[i] = state.xIsNext ? "X" : "O";
     const newState: StateType = {
       squares: newSquares,
@@ -23,7 +27,14 @@ const Board = () => {
   const renderSquare = (i: number) => {
     return <Square value={state.squares[i]} onClick={() => handleClick(i)} />;
   };
-  const status = "Next player: " + state.xIsNext ? "X" : "O";
+
+  const winner = calculateWinner(state.squares);
+  let status;
+  if (winner) {
+    status = 'Winner: ' + winner;
+  } else {
+    status = 'Next player: ' + (state.xIsNext ? "X" : "O");
+  }
 
   return (
     <div>
