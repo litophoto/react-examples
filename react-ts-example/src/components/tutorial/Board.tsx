@@ -1,28 +1,47 @@
 import { useState } from "react";
 import Square from "./Square";
 
-type SquareType = {}
+type StateType = {
+  squares: (string | null)[];
+  xIsNext: boolean;
+};
 
 const Board = () => {
-  const status = "Next player: X"
-  const [squares, setSquares] = useState<SquareType[]>(Array(9).fill(null))
+  const [state, setState] = useState<StateType>({
+    squares: Array(9).fill(null),
+    xIsNext: true,
+  });
+  const handleClick = (i: number) => {
+    const newSquares = state.squares.slice();
+    newSquares[i] = state.xIsNext ? "X" : "O";
+    const newState: StateType = {
+      squares: newSquares,
+      xIsNext: !state.xIsNext,
+    };
+    setState(newState);
+  };
+  const renderSquare = (i: number) => {
+    return <Square value={state.squares[i]} onClick={() => handleClick(i)} />;
+  };
+  const status = "Next player: " + state.xIsNext ? "X" : "O";
+
   return (
     <div>
       <div className="status">{status}</div>
       <div className="board-row">
-        <Square value={0} />
-        <Square value={1} />
-        <Square value={2} />
+        {renderSquare(0)}
+        {renderSquare(1)}
+        {renderSquare(2)}
       </div>
       <div className="board-row">
-        <Square value={3} />
-        <Square value={4} />
-        <Square value={5} />
+        {renderSquare(3)}
+        {renderSquare(4)}
+        {renderSquare(5)}
       </div>
       <div className="board-row">
-        <Square value={6} />
-        <Square value={7} />
-        <Square value={8} />
+        {renderSquare(6)}
+        {renderSquare(7)}
+        {renderSquare(8)}
       </div>
     </div>
   );
