@@ -1,20 +1,13 @@
 import { useState, useEffect } from "react";
 
 type Props = {
-  value: number;
+  value: string | null;
+  onClick: () => void;
 };
 
-const Square = (props: Props) => {
-  const [value, setValue] = useState<number | string>();
-  useEffect(() => {
-    setValue(props.value);
-  }, []);
-
-  const setValueX = () => {
-    setValue("X");
-  };
+const Square = ({ value, onClick }: Props) => {
   return (
-    <button className="square" onClick={setValueX}>
+    <button className="square" onClick={onClick}>
       {value}
     </button>
   );
