@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Typography } from "@mui/material";
 import { Tabs, Tab } from "@mui/material";
-import { List, ListItem, Checkbox, IconButton } from "@mui/material";
-import { TextField } from "@mui/material";
-import { Delete } from "@mui/icons-material";
+import { List, ListItem, Checkbox } from "@mui/material";
 import { Todo, Visibility } from "../models/todos";
-import todosAPI from "../api/todos";
-
+import TodoItem from "../components/TodoItem";
+import AddNewTodo from "../components/AddNewTodo";
+import useTodos from "../hooks/useTodos";
 
 const todosFilter = (todos: Todo[]) => {
   return {
@@ -16,91 +15,8 @@ const todosFilter = (todos: Todo[]) => {
   };
 };
 
-type TodoItemProps = {
-  todo: Todo;
-  change: (oldValue: Todo, newValue: Todo) => void;
-  delete: (oldValue: Todo) => void;
-};
-
-const TodoItem = (props: TodoItemProps) => {
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newTodo: Todo = {
-      title: props.todo.title,
-      completed: event.target.checked,
-    };
-    props.change(props.todo, newTodo);
-  };
-
-  const [isEditing, setIsEditing] = useState(false);
-  const [newTitle, setNewTitle] = useState("");
-  useEffect(() => {
-    setNewTitle(props.todo.title);
-  }, []);
-
-  const handleChangeTitle = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setNewTitle(event.target.value);
-  };
-  
-  const [typing, setTyping] = useState(false);
-  const handleStartEdit = () => {
-    setIsEditing(true)
-  }
-  const handleDoneEdit = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key !== "Enter" || typing) return;
-    const newTodo: Todo = {
-      title: newTitle,
-      completed: props.todo.completed,
-    };
-    newTodo && props.change(props.todo, newTodo);
-    setIsEditing(false);
-  };
-
-  return (
-    <>
-      <ListItem
-        secondaryAction={
-          <IconButton
-            edge="end"
-            aria-label="delete"
-            color="warning"
-            onClick={() => props.delete(props.todo)}
-          >
-            <Delete />
-          </IconButton>
-        }
-      >
-        <Checkbox
-          checked={props.todo.completed}
-          onChange={(e) => handleChange(e)}
-        />
-        {isEditing ? (
-          <TextField
-            value={newTitle}
-            onChange={handleChangeTitle}
-            onKeyDown={handleDoneEdit}
-            onCompositionStart={() => setTyping(true)}
-            onCompositionEnd={() => setTyping(false)}
-            size="small"
-            variant="standard"
-            fullWidth
-          />
-        ) : (
-          <Typography
-            sx={{ width: "100%" }}
-            onDoubleClick={handleStartEdit}
-          >
-            {props.todo.title}
-          </Typography>
-        )}
-      </ListItem>
-    </>
-  );
-};
-
 const Todos = () => {
-  const [todos, actions] = todosAPI();
+  const [todos, actions] = useTodos();
 
   const [visibility, setVisibility] = useState<Visibility>("all");
   const handleVisibility = (
@@ -114,21 +30,6 @@ const Todos = () => {
     setFilteredTodos(todosFilter(todos)[visibility]);
   }, [todos, visibility]);
 
-  const [newTodo, setNewTodo] = useState<Todo>({ title: "", completed: false });
-  const handleChangeTodoTitle = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setNewTodo({
-      title: event.target.value,
-      completed: false,
-    });
-  };
-  const [typing, setTyping] = useState(false);
-  const handleCreateNewTodo = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key !== "Enter" || typing) return;
-    newTodo && actions.create(newTodo);
-    setNewTodo({ title: "", completed: false });
-  };
   return (
     <>
       <header>
@@ -144,16 +45,7 @@ const Todos = () => {
       <List>
         <ListItem>
           <Checkbox />
-          <TextField
-            value={newTodo.title}
-            onChange={(e) => handleChangeTodoTitle(e)}
-            onKeyDown={handleCreateNewTodo}
-            onCompositionStart={() => setTyping(true)}
-            onCompositionEnd={() => setTyping(false)}
-            autoFocus
-            fullWidth
-            size="small"
-          />
+          <AddNewTodo create={actions.create} />
         </ListItem>
         {filteredTodos.map((todo) => (
           <TodoItem

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Visibility, Todo } from "../models/todos";
+import { Todo } from "../models/todos";
 
 const url = "http://127.0.0.1:8000/todos/";
 const headers = {
@@ -14,7 +14,7 @@ const todosAPI = () => {
       const data = await res.json();
       await setTodos(data);
     })();
-    console.log('get todos')
+    console.log("get todos");
   }, []);
 
   const actions = {
@@ -30,7 +30,7 @@ const todosAPI = () => {
       })();
     },
     update: (oldTodo: Todo, newTodo: Todo) => {
-      if (!oldTodo.id) return
+      if (!oldTodo.id) return;
       (async () => {
         const res = await fetch(`${url}${oldTodo.id}/`, {
           method: "PUT",
@@ -46,7 +46,7 @@ const todosAPI = () => {
       })();
     },
     delete: (oldTodo: Todo) => {
-      if (!oldTodo.id) return
+      if (!oldTodo.id) return;
       (async () => {
         const res = await fetch(`${url}${oldTodo.id}/`, {
           method: "DELETE",

@@ -14,10 +14,10 @@ function PostPage(post: Post) {
 }
 
 export async function getStaticProps({ params }) {
-  const res = await fetch('url')
-  const post = await res.json()
+  const res = await fetch("url");
+  const post = await res.json();
 
-  return { props: { post }}
+  return { props: { post } };
 }
 
-export default PostPage
+export default PostPage;
